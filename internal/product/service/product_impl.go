@@ -17,7 +17,7 @@ func NewProductService(productRepository repository.ProductRepository) *ProductS
 	}
 }
 
-func (s *ProductServiceImpl) CreateProduct(request *domain.CreateProductRequest) (domain.ProductResponse, error) {
+func (s *ProductServiceImpl) CreateProduct(request *domain.ProductRequest) (domain.ProductResponse, error) {
 	// Validate the request
 	if err := pkg.Validate(request); err != nil {
 		return domain.ProductResponse{}, err
@@ -71,4 +71,36 @@ func (s *ProductServiceImpl) GetAllProducts() ([]domain.ProductResponse, error) 
 	}
 	
 	return productResponses, nil
+}
+
+func (s *ProductServiceImpl) UpdateProduct(id uint, request *domain.ProductRequest) (domain.ProductResponse, error) {
+	// Validate the request
+	if err := pkg.Validate(request); err != nil {
+		return domain.ProductResponse{}, err
+	}
+	
+	// Create product entity for update
+	product := &entity.Product{
+		Name:  request.Name,
+		Price: request.Price,
+	}
+	
+	// Update via repository
+	updatedProduct, err := s.productRepository.UpdateProduct(id, product)
+	if err != nil {
+		return domain.ProductResponse{}, err
+	}
+	
+	// Return response
+	return domain.ProductResponse{
+		ID:        updatedProduct.ID,
+		Name:      updatedProduct.Name,
+		Price:     updatedProduct.Price,
+		CreatedAt: updatedProduct.CreatedAt,
+		UpdatedAt: updatedProduct.UpdatedAt,
+	}, nil
+}
+
+func (s *ProductServiceImpl) DeleteProduct(id uint) error {
+	return s.productRepository.DeleteProduct(id)
 }

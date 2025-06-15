@@ -21,7 +21,7 @@ func NewProductHandler(productService service.ProductService) *ProductHandler {
 }
 
 func (h *ProductHandler) CreateProduct(c *gin.Context) {
-	var request domain.CreateProductRequest
+	var request domain.ProductRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, pkg.NewBaseErrorResponse("Invalid request format"))
 		return
@@ -68,4 +68,54 @@ func (h *ProductHandler) GetAllProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, pkg.NewBaseSuccessResponse("Products retrieved successfully", products))
+}
+
+func (h *ProductHandler) UpdateProduct(c *gin.Context) {
+	// Parse the product ID from the URL
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, pkg.NewBaseErrorResponse("Invalid product ID"))
+		return
+	}
+
+	// Parse request body
+	var request domain.ProductRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, pkg.NewBaseErrorResponse("Invalid request format"))
+		return
+	}
+
+	// Call service to update product
+	product, err := h.productService.UpdateProduct(uint(id), &request)
+	if err != nil {
+		if validationErrors, ok := err.(pkg.ValidationErrors); ok {
+			c.JSON(http.StatusBadRequest, pkg.NewValidationErrorResponse("Validation failed", validationErrors))
+			return
+		}
+
+		c.JSON(pkg.ConvertErrorCode(err), pkg.NewBaseErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, pkg.NewBaseSuccessResponse("Product updated successfully", product))
+}
+
+func (h *ProductHandler) DeleteProduct(c *gin.Context) {
+	// Parse the product ID from the URL
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, pkg.NewBaseErrorResponse("Invalid product ID"))
+		return
+	}
+
+	// Call service to delete product
+	err = h.productService.DeleteProduct(uint(id))
+	if err != nil {
+		c.JSON(pkg.ConvertErrorCode(err), pkg.NewBaseErrorResponse(err.Error()))
+		return
+	}
+
+	c.JSON(http.StatusOK, pkg.NewBaseSuccessResponse("Product deleted successfully", nil))
 }

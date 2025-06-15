@@ -35,5 +35,7 @@ func (r *Route) RegisterRoutes(ge *gin.Engine) {
         productGroup.POST("", r.productHandler.CreateProduct)
         productGroup.GET("", r.productHandler.GetAllProducts)
         productGroup.GET("/:id", r.productHandler.GetProductByID)
+        productGroup.PUT("/:id", r.productHandler.UpdateProduct)
+        productGroup.DELETE("/:id", r.productHandler.DeleteProduct)
     }
 }
