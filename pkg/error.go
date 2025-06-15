@@ -11,6 +11,8 @@ var (
 	ErrEmailAlreadyExists = errors.New("email already exists")
 	ErrInvalidCredentials = errors.New("invalid email or password")
 	ErrUserNotFound	   = errors.New("user not found")
+	ErrUnAuthorizedAccess = errors.New("unauthorized access")
+	ErrProductNotFound  = errors.New("product not found")
 
 	ErrInternalServerError = errors.New("internal server error")
 )
@@ -26,6 +28,10 @@ func ConvertErrorCode(err error) int {
 	case ErrInvalidCredentials:
 		return http.StatusUnauthorized
 	case ErrUserNotFound:
+		return http.StatusNotFound
+	case ErrUnAuthorizedAccess:
+		return http.StatusForbidden
+	case ErrProductNotFound:
 		return http.StatusNotFound
 	default:
 		// Check if it's a validation error

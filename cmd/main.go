@@ -8,6 +8,9 @@ import (
 	aHandler "product-manager-api/internal/auth/handler"
 	aService "product-manager-api/internal/auth/service"
 	jService "product-manager-api/internal/jwt/service"
+	pHandler "product-manager-api/internal/product/handler"
+	pRepository "product-manager-api/internal/product/repository"
+	pService "product-manager-api/internal/product/service"
 	uRepository "product-manager-api/internal/user/repository"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +33,11 @@ func main() {
 	authService := aService.NewAuthService(userRepo)
 	authHandler := aHandler.NewAuthHandler(authService, jwtService)
 
-	routes := routes.NewRoute(authHandler, jwtService)
+	productRepo := pRepository.NewProductRepository(config.DB)
+	productService := pService.NewProductService(productRepo)
+	productHandler := pHandler.NewProductHandler(productService)
+
+	routes := routes.NewRoute(authHandler, jwtService, productHandler)
 
 	routes.RegisterRoutes(r)
 

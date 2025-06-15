@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"net/http"
 	"product-manager-api/internal/jwt/service"
 	"product-manager-api/pkg"
 
@@ -12,7 +11,7 @@ func Authentication(jwtService service.JWTService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, pkg.NewBaseErrorResponse("Unauthorized"))
+			c.JSON(pkg.ConvertErrorCode(pkg.ErrUnAuthorizedAccess), pkg.NewBaseErrorResponse(pkg.ErrUnAuthorizedAccess.Error()))
 			c.Abort()
 			return
 		}
@@ -20,7 +19,7 @@ func Authentication(jwtService service.JWTService) gin.HandlerFunc {
 		// Extract user ID from token
 		userID, err := jwtService.GetIDFromToken(authHeader)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, pkg.NewBaseErrorResponse(err.Error()))
+			c.JSON(pkg.ConvertErrorCode(err), pkg.NewBaseErrorResponse(err.Error()))
 			c.Abort()
 			return
 		}
