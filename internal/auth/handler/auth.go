@@ -24,7 +24,7 @@ func NewAuthHandler(authService aService.AuthService, jwtService jService.JWTSer
 }
 
 func (h *AuthHandler) Register(c *gin.Context) {
-	var request aDomain.RegisterRequest
+	var request aDomain.Request
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, pkg.NewBaseErrorResponse("Invalid request format"))
 		return
@@ -42,4 +42,23 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, pkg.NewBaseSuccessResponse("success register", response))
+}
+
+func (h *AuthHandler) Login(c *gin.Context) {
+	var request aDomain.Request
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, pkg.NewBaseErrorResponse("Invalid request format"))
+		return
+	}
+	response, err := h.authService.Login(request, h.jwtService)
+	if err != nil {
+		if validationErrors, ok := err.(pkg.ValidationErrors); ok {
+			c.JSON(http.StatusBadRequest, pkg.NewValidationErrorResponse("Validation failed", validationErrors))
+			return
+		}
+
+		c.JSON(pkg.ConvertErrorCode(err), pkg.NewBaseErrorResponse(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, pkg.NewBaseSuccessResponse("success login", response))
 }

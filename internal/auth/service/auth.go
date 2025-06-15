@@ -6,5 +6,6 @@ import (
 )
 
 type AuthService interface {
-	Register(request domain.RegisterRequest, jwtService service.JWTService) (domain.RegisterResponse, error)
+	Register(request domain.Request, jwtService service.JWTService) (domain.Response, error)
+	Login(request domain.Request, jwtService service.JWTService) (domain.Response, error)
 }
