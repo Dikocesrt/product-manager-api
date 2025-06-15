@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"product-manager-api/internal/entity"
+	"product-manager-api/internal/user/entity"
 
 	"gorm.io/gorm"
 )

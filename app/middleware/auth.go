@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"net/http"
-	"product-manager-api/internal/service"
+	"product-manager-api/internal/jwt/service"
 	"product-manager-api/pkg"
 
 	"github.com/gin-gonic/gin"

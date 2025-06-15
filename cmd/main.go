@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
+	"product-manager-api/app/routes"
 	"product-manager-api/config"
-	"product-manager-api/internal/handler"
-	"product-manager-api/internal/repository"
-	"product-manager-api/internal/routes"
-	"product-manager-api/internal/service"
+	aHandler "product-manager-api/internal/auth/handler"
+	aService "product-manager-api/internal/auth/service"
+	jService "product-manager-api/internal/jwt/service"
+	uRepository "product-manager-api/internal/user/repository"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,12 +23,12 @@ func main() {
 	// r.Use(middleware.Logger())
 	// r.Use(middleware.CORS())
 
-	userRepo := repository.NewUserRepository(config.DB)
+	userRepo := uRepository.NewUserRepository(config.DB)
 
-	jwtService := service.NewJWTService()
+	jwtService := jService.NewJWTService()
 
-	authService := service.NewAuthService(userRepo)
-	authHandler := handler.NewAuthHandler(authService, jwtService)
+	authService := aService.NewAuthService(userRepo)
+	authHandler := aHandler.NewAuthHandler(authService, jwtService)
 
 	routes := routes.NewRoute(authHandler, jwtService)
 

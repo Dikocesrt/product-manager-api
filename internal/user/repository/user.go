@@ -1,6 +1,7 @@
 package repository
 
-import "product-manager-api/internal/entity"
+import "product-manager-api/internal/user/entity"
+
 
 type UserRepository interface {
 	FindByEmail(email string) (*entity.User, error)

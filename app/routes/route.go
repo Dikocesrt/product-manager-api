@@ -1,18 +1,18 @@
 package routes
 
 import (
-	"product-manager-api/internal/handler"
-	"product-manager-api/internal/service"
+	aHandler "product-manager-api/internal/auth/handler"
+	"product-manager-api/internal/jwt/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 type Route struct {
-	authHandler *handler.AuthHandler
+	authHandler *aHandler.AuthHandler
 	jwtService service.JWTService
 }
 
-func NewRoute(authHandler *handler.AuthHandler, jwtService service.JWTService) *Route {
+func NewRoute(authHandler *aHandler.AuthHandler, jwtService service.JWTService) *Route {
 	return &Route{
 		authHandler: authHandler,
 		jwtService: jwtService,
