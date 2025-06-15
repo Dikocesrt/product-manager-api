@@ -13,8 +13,8 @@ type JWTServiceImpl struct {
 
 }
 
-func NewJWTService() JWTServiceImpl {
-	return JWTServiceImpl{}
+func NewJWTService() *JWTServiceImpl {
+	return &JWTServiceImpl{}
 }
 
 func (s JWTServiceImpl) GenerateToken(userID uint) (string, error) {

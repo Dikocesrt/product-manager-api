@@ -29,7 +29,10 @@ func (s *AuthServiceImpl) Register(request domain.RegisterRequest, jwtService JW
 		return domain.RegisterResponse{}, pkg.ErrEmailAlreadyExists
 	}
 
-	hashPassword,_ := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return domain.RegisterResponse{}, pkg.ErrInternalServerError
+	}
 
 	user := &entity.User{
 		Email:    request.Email,

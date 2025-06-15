@@ -15,7 +15,12 @@ import (
 func main() {
 	config.Init()
 
-	r := gin.Default()
+	r := gin.New()
+	
+	// Add middleware
+	// r.Use(gin.Recovery())
+	// r.Use(middleware.Logger())
+	// r.Use(middleware.CORS())
 
 	userRepo := repository.NewUserRepository(config.DB)
 
@@ -24,7 +29,7 @@ func main() {
 	authService := service.NewAuthService(userRepo)
 	authHandler := handler.NewAuthHandler(authService, jwtService)
 
-	routes := routes.NewRoute(authHandler)
+	routes := routes.NewRoute(authHandler, jwtService)
 
 	routes.RegisterRoutes(r)
 
