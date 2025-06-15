@@ -4,8 +4,8 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	Email    string `gorm:"type:varchar(255);unique;not null" validate:"required,email"`
-	Password string `gorm:"type:varchar(255);not null" validate:"required,min=6,max=25"`
+	Email    string `gorm:"type:varchar(255);unique;not null"`
+	Password string `gorm:"type:varchar(255);not null"`
 }
 
 func (User) TableName() string {

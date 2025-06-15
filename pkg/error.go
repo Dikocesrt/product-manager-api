@@ -8,6 +8,7 @@ import (
 var (
 	ErrEmptyField       = errors.New("field cannot be empty")
 	ErrInvalidToken     = errors.New("invalid token")
+	ErrEmailAlreadyExists = errors.New("email already exists")
 )
 
 func ConvertErrorCode(err error) int {
@@ -16,6 +17,8 @@ func ConvertErrorCode(err error) int {
 		return http.StatusBadRequest
 	case ErrInvalidToken:
 		return http.StatusUnauthorized
+	case ErrEmailAlreadyExists:
+		return http.StatusConflict
 	default:
 		return http.StatusInternalServerError
 	}
