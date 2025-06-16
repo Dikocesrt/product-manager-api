@@ -1,0 +1,22 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+    description: "Product ID"
+  name:
+    type: string
+    example: "Aqua 600ml"
+    description: "Product name"
+  price:
+    type: integer
+    example: 1000
+    description: "Product price"
+  created_at:
+    type: string
+    example: "2023-08-01T10:00:00Z"
+    description: "Product created at"
+  updated_at:
+    type: string
+    example: "2023-08-01T10:00:00Z"
+    description: "Product updated at"

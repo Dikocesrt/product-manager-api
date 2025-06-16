@@ -1,0 +1,206 @@
+openapi: 3.0.0
+
+info:
+  title: Product Management API
+  description: API documentation for Simple Product Maangement App
+  version: 1.0.0
+  
+servers:
+  - url: http://localhost:8080/
+    description: Local
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schema/auth/request.yaml'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "User registered successfully"
+                  data:
+                    $ref: './schema/auth/response.yaml'
+  
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schema/auth/request.yaml'
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "User logged in successfully"
+                  data:
+                    $ref: './schema/auth/response.yaml'
+
+  /product:
+    post:
+      tags:
+        - Product
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schema/product/request.yaml'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Product created successfully"
+                  data:
+                    $ref: './schema/product/response.yaml'
+
+    get:
+      tags:
+        - Product
+      summary: Get all products
+      responses:
+        '200':
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Products retrieved successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: './schema/product/response.yaml'
+
+  /product/{id}:
+    get:
+      tags:
+        - Product
+      summary: Get a product by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Product retrieved successfully"
+                  data:
+                    $ref: './schema/product/response.yaml'
+
+    put:
+      tags:
+        - Product
+      summary: Update a product by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schema/product/request.yaml'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                  data:
+                    $ref: './schema/product/response.yaml'
+
+    delete:
+      tags:
+        - Product
+      summary: Delete a product by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the product to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Product deleted successfully"
